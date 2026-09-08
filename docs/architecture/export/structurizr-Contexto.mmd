@@ -5,13 +5,13 @@ graph LR
   style 1 fill:#1a3a5c,stroke:#122840,color:#ffffff
 
   4("<b>RaceFlow</b><br/><i>[Software System]</i><br/>Salas de entrenamiento colaborativas en tiempo real")
-  style 4 fill:#2471a3,stroke:#194f72,color:#ffffff
+  style 4 fill:#7DCEA0,stroke:#229954,color:#0b3d24
 
-  2("<b>Servicio de Mapas</b><br/><i>[External]</i> Leaflet + OSM")
-  style 2 fill:#999999,stroke:#6b6b6b,color:#ffffff
+  2("<b>Servicio de Mapas</b><br/><i>[Software System]</i><br/>Leaflet + OpenStreetMap")
+  style 2 fill:#F1948A,stroke:#C0392B,color:#4a1109
 
-  3("<b>API de Geolocalización</b><br/><i>[External]</i> GPS del navegador")
-  style 3 fill:#999999,stroke:#6b6b6b,color:#ffffff
+  3("<b>API de Geolocalización</b><br/><i>[Software System]</i><br/>GPS del navegador")
+  style 3 fill:#F1948A,stroke:#C0392B,color:#4a1109
 
   1 -. "Crea salas, transmite GPS, ve ranking, historial [HTTPS + WSS]" .-> 4
   4 -. "Tiles del mapa [HTTPS]" .-> 2
