@@ -100,7 +100,7 @@ workspace "RaceFlow" "Salas de entrenamiento colaborativas en tiempo real para d
 
     views {
         systemContext raceflow "Contexto" {
-            include *
+            include athlete raceflow mapsService geolocationApi
             autoLayout lr
         }
 

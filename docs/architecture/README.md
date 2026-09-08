@@ -1,12 +1,12 @@
 # RaceFlow — Documentación de Arquitectura (C4)
 
 Diagramas de arquitectura del sistema usando el [modelo C4](https://c4model.com/),
-renderizados con [C4-PlantUML](https://github.com/plantuml-stdlib/C4-PlantUML) a
-partir del modelo fuente en [`workspace.dsl`](workspace.dsl). El modelo se creó
-originalmente con [Structurizr Lite](https://structurizr.com/help/lite), pero esa
-herramienta fue descontinuada por sus autores; `workspace.dsl` se conserva como
-referencia legible del modelo, mientras que los `.puml` en `export/` son la
-fuente real de los diagramas.
+generados a partir del modelo fuente en [`workspace.dsl`](workspace.dsl) con
+[Structurizr](https://structurizr.com/) (imagen Docker `structurizr/structurizr`,
+sucesora de la ya descontinuada Structurizr Lite). Los `.svg`/`.png` en `export/`
+son la fuente real de los diagramas, exportados directamente desde el visor de
+Structurizr para respetar la notación estándar de C4 (silueta de persona, cajas
+con borde de color, sin relleno).
 
 > Para el mapeo de los estilos de comunicación distribuida (sockets, HTTP, RMI, gRPC,
 > microservicios, API Gateway) contra la arquitectura real de RaceFlow, ver
@@ -40,24 +40,28 @@ fuente real de los diagramas.
 
 ## Editar y regenerar los diagramas
 
-Structurizr Lite (la herramienta original de este proyecto) fue descontinuada
-por sus autores y ya no se levanta. Los diagramas ahora se editan directamente
-en los archivos `.puml` de `export/`, usando la sintaxis de
-[C4-PlantUML](https://github.com/plantuml-stdlib/C4-PlantUML).
-
 **Requisito:** Docker Desktop instalado.
 
-```bash
-docker run -d --name plantuml-server -p 8082:8080 plantuml/plantuml-server
-docker cp export/structurizr-Contexto.puml plantuml-server:/tmp/contexto.puml
-docker exec plantuml-server java -jar /usr/local/plantuml.jar -tpng /tmp/contexto.puml
-docker cp plantuml-server:/tmp/Contexto.png export/structurizr-Contexto.png
-```
+1. Edita el modelo en `workspace.dsl` (elementos, relaciones, vistas, estilos).
+2. Levanta Structurizr local, montando esta carpeta:
 
-Repite el mismo patrón para `structurizr-Contenedores.puml` y
-`structurizr-Componentes_Realtime.puml`. Si cambias el modelo, actualiza tanto
-`workspace.dsl` (referencia legible) como los `.puml` correspondientes — hoy
-son independientes, no se generan el uno del otro.
+   ```bash
+   docker run -d --name structurizr-local -p 8083:8080 -v "$(pwd)":/usr/local/structurizr structurizr/structurizr local
+   ```
+
+3. Abre `http://localhost:8083/workspace/1/diagrams` en el navegador y selecciona
+   la vista (`Contexto`, `Contenedores`, `Componentes_Realtime`).
+4. Usa el botón **Export as PNG** de la interfaz de Structurizr para descargar
+   cada diagrama y reemplaza el `.png` correspondiente en `export/`. Si quieres
+   conservar también el SVG editable, usa **Export as SVG**.
+5. Si borras el contenedor y vuelves a montar la carpeta, elimina primero
+   `workspace.json` (caché de Structurizr) para forzar que se regenere desde el
+   `.dsl` actualizado:
+
+   ```bash
+   docker stop structurizr-local && docker rm structurizr-local
+   rm -f workspace.json
+   ```
 
 ## Vistas disponibles
 
@@ -71,16 +75,16 @@ son independientes, no se generan el uno del otro.
 
 ```
 docs/architecture/
-├── workspace.dsl       ← modelo C4 en DSL de Structurizr (referencia legible)
-├── workspace.json      ← estado legado de Structurizr Lite (ya no se usa)
+├── workspace.dsl       ← modelo C4 en DSL de Structurizr (fuente del modelo)
+├── workspace.json       ← caché/estado resuelto de Structurizr (se regenera solo)
 ├── README.md           ← este archivo
 └── export/
     ├── structurizr-Contexto.png
-    ├── structurizr-Contexto.puml
+    ├── structurizr-Contexto.svg
     ├── structurizr-Contenedores.png
-    ├── structurizr-Contenedores.puml
+    ├── structurizr-Contenedores.svg
     ├── structurizr-Componentes_Realtime.png
-    └── structurizr-Componentes_Realtime.puml
+    └── structurizr-Componentes_Realtime.svg
 ```
 
 ## Referencia rápida del DSL
