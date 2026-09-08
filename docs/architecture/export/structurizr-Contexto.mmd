@@ -1,18 +1,27 @@
 graph LR
   linkStyle default fill:#ffffff
 
-  1["<b>Atleta</b><br/><i>[Person]</i><br/>Crea/une salas, transmite GPS, ve ranking"]
-  style 1 fill:#1a3a5c,stroke:#122840,color:#ffffff
+  subgraph actor1 [" "]
+    direction TB
+    style actor1 fill:none,stroke:none
+    1h((" "))
+    style 1h fill:#ffffff,stroke:#2E7D32,stroke-width:3px
+    1["<b>Atleta</b><br/><i>[Person]</i><br/><br/>Crea o se une a salas,<br/>transmite GPS en vivo, ve<br/>ranking y recibe reacciones."]
+    style 1 fill:#ffffff,stroke:#2E7D32,stroke-width:3px,color:#2E7D32
+    1h --- 1
+  end
 
-  4("<b>RaceFlow</b><br/><i>[Software System]</i><br/>Salas de entrenamiento colaborativas en tiempo real")
-  style 4 fill:#2471a3,stroke:#194f72,color:#ffffff
+  4["<b>RaceFlow</b><br/><i>[Software System]</i><br/><br/>Salas de entrenamiento<br/>colaborativas en tiempo real."]
+  style 4 fill:#ffffff,stroke:#1565C0,stroke-width:3px,color:#1565C0
 
-  2("<b>Servicio de Mapas</b><br/><i>[External]</i> Leaflet + OSM")
-  style 2 fill:#999999,stroke:#6b6b6b,color:#ffffff
+  2["<b>Servicio de Mapas</b><br/><i>[Software System]</i><br/><br/>Leaflet + OpenStreetMap."]
+  style 2 fill:#ffffff,stroke:#E65100,stroke-width:3px,color:#E65100
 
-  3("<b>API de Geolocalización</b><br/><i>[External]</i> GPS del navegador")
-  style 3 fill:#999999,stroke:#6b6b6b,color:#ffffff
+  3["<b>API de Geolocalización</b><br/><i>[Software System]</i><br/><br/>GPS del navegador."]
+  style 3 fill:#ffffff,stroke:#B71C1C,stroke-width:3px,color:#B71C1C
 
-  1 -. "Crea salas, transmite GPS, ve ranking, historial [HTTPS + WSS]" .-> 4
+  1 -. "Crea salas, transmite GPS,<br/>ve ranking [HTTPS + WSS]" .-> 4
   4 -. "Tiles del mapa [HTTPS]" .-> 2
   1 -. "Coordenadas GPS" .-> 3
+
+  linkStyle 0 stroke:#2E7D32,stroke-width:3px

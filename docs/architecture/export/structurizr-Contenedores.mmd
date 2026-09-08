@@ -1,61 +1,68 @@
 graph LR
   linkStyle default fill:#ffffff
 
-  subgraph diagram ["Container View: RaceFlow"]
-    direction LR
-    style diagram fill:#ffffff,stroke:#ffffff
-
+  subgraph actor1 [" "]
+    direction TB
+    style actor1 fill:none,stroke:none
+    1h((" "))
+    style 1h fill:#ffffff,stroke:#2E7D32,stroke-width:3px
     1["<b>Atleta</b><br/><i>[Person]</i>"]
-    style 1 fill:#1a3a5c,stroke:#122840,color:#ffffff
-    2("<b>Servicio de Mapas</b><br/><i>[External]</i>")
-    style 2 fill:#999999,stroke:#6b6b6b,color:#ffffff
-
-    subgraph 4 ["RaceFlow"]
-      direction LR
-      5["<b>Web Application</b><br/><i>[React + TS + Leaflet]</i>"]
-      style 5 fill:#17c3b2,stroke:#10887c,color:#06303a
-      6("<b>API Gateway</b><br/><i>[Spring Cloud Gateway]</i><br/>2 workers")
-      style 6 fill:#438dd5,stroke:#2e6295,color:#ffffff
-      7("<b>Auth Service</b><br/><i>[Java 21 + Spring Boot]</i><br/>registro, login, JWT, gRPC :9090")
-      style 7 fill:#438dd5,stroke:#2e6295,color:#ffffff
-      8("<b>Room Service</b><br/><i>[Java 21 + Spring Boot]</i>")
-      style 8 fill:#438dd5,stroke:#2e6295,color:#ffffff
-      9("<b>Realtime / Ranking Service</b><br/><i>[Java 21 + Spring Boot]</i><br/>fijado a 1 instancia")
-      style 9 fill:#438dd5,stroke:#2e6295,color:#ffffff
-      16("<b>Session / History Service</b><br/><i>[Java 21 + Spring Boot]</i>")
-      style 16 fill:#438dd5,stroke:#2e6295,color:#ffffff
-      17("<b>Metrics Service</b><br/><i>[Java 21 + Spring Boot]</i>")
-      style 17 fill:#438dd5,stroke:#2e6295,color:#ffffff
-      18["<b>Event Bus</b><br/><i>[RabbitMQ]</i>"]
-      style 18 fill:#6c3483,stroke:#4b245b,color:#ffffff
-      19[("<b>Estado en memoria</b><br/><i>[Redis]</i>")]
-      style 19 fill:#c0392b,stroke:#86271e,color:#ffffff
-      20[("<b>Auth DB</b><br/><i>[PostgreSQL]</i>")]
-      style 20 fill:#12557c,stroke:#0c3b56,color:#ffffff
-      21[("<b>Room DB</b><br/><i>[PostgreSQL]</i>")]
-      style 21 fill:#12557c,stroke:#0c3b56,color:#ffffff
-      22[("<b>Session DB</b><br/><i>[PostgreSQL]</i>")]
-      style 22 fill:#12557c,stroke:#0c3b56,color:#ffffff
-      23[("<b>Metrics DB</b><br/><i>[PostgreSQL]</i>")]
-      style 23 fill:#12557c,stroke:#0c3b56,color:#ffffff
-    end
-
-    1 -. "Accede [HTTPS]" .-> 5
-    5 -. "Tiles [HTTPS]" .-> 2
-    5 -. "REST [JSON/HTTPS]" .-> 6
-    5 -. "Canal DIRECTO [WSS]" .-> 9
-    6 -. "Autenticación" .-> 7
-    6 -. "Gestión de salas" .-> 9
-    6 -. "Historial" .-> 16
-    6 -. "KPIs" .-> 17
-    9 -. "getProfile(email) [gRPC :9090]" .-> 7
-    9 -. "Redis protocol" .-> 19
-    7 -. "JDBC" .-> 20
-    8 -. "JDBC" .-> 21
-    16 -. "JDBC" .-> 22
-    17 -. "JDBC" .-> 23
-    8 -. "AMQP" .-> 18
-    9 -. "AMQP" .-> 18
-    18 -. "AMQP" .-> 16
-    18 -. "AMQP" .-> 17
+    style 1 fill:#ffffff,stroke:#2E7D32,stroke-width:3px,color:#2E7D32
+    1h --- 1
   end
+
+  2["<b>Servicio de Mapas</b><br/><i>[Software System]</i>"]
+  style 2 fill:#ffffff,stroke:#E65100,stroke-width:3px,color:#E65100
+
+  subgraph diagram ["RaceFlow [Software System]"]
+    direction LR
+    style diagram fill:#ffffff,stroke:#1565C0,stroke-width:2px,color:#1565C0
+
+    5["<b>Web Application</b><br/><i>[Container: React + TS + Leaflet]</i>"]
+    style 5 fill:#ffffff,stroke:#1565C0,stroke-width:2px,color:#1565C0
+    6["<b>API Gateway</b><br/><i>[Container: Spring Cloud Gateway]</i><br/>2 workers"]
+    style 6 fill:#ffffff,stroke:#1565C0,stroke-width:2px,color:#1565C0
+    7["<b>Auth Service</b><br/><i>[Container: Java 21 + Spring Boot]</i><br/>registro, login, JWT, gRPC :9090"]
+    style 7 fill:#ffffff,stroke:#1565C0,stroke-width:2px,color:#1565C0
+    8["<b>Room Service</b><br/><i>[Container: Java 21 + Spring Boot]</i>"]
+    style 8 fill:#ffffff,stroke:#1565C0,stroke-width:2px,color:#1565C0
+    9["<b>Realtime / Ranking Service</b><br/><i>[Container: Java 21 + Spring Boot]</i><br/>fijado a 1 instancia"]
+    style 9 fill:#ffffff,stroke:#1565C0,stroke-width:2px,color:#1565C0
+    16["<b>Session / History Service</b><br/><i>[Container: Java 21 + Spring Boot]</i>"]
+    style 16 fill:#ffffff,stroke:#1565C0,stroke-width:2px,color:#1565C0
+    17["<b>Metrics Service</b><br/><i>[Container: Java 21 + Spring Boot]</i>"]
+    style 17 fill:#ffffff,stroke:#1565C0,stroke-width:2px,color:#1565C0
+    18["<b>Event Bus</b><br/><i>[Container: RabbitMQ]</i>"]
+    style 18 fill:#ffffff,stroke:#1565C0,stroke-width:2px,color:#1565C0
+    19[("<b>Estado en memoria</b><br/><i>[Container: Redis]</i>")]
+    style 19 fill:#ffffff,stroke:#1565C0,stroke-width:2px,color:#1565C0
+    20[("<b>Auth DB</b><br/><i>[Container: PostgreSQL]</i>")]
+    style 20 fill:#ffffff,stroke:#1565C0,stroke-width:2px,color:#1565C0
+    21[("<b>Room DB</b><br/><i>[Container: PostgreSQL]</i>")]
+    style 21 fill:#ffffff,stroke:#1565C0,stroke-width:2px,color:#1565C0
+    22[("<b>Session DB</b><br/><i>[Container: PostgreSQL]</i>")]
+    style 22 fill:#ffffff,stroke:#1565C0,stroke-width:2px,color:#1565C0
+    23[("<b>Metrics DB</b><br/><i>[Container: PostgreSQL]</i>")]
+    style 23 fill:#ffffff,stroke:#1565C0,stroke-width:2px,color:#1565C0
+  end
+
+  1 -. "Accede [HTTPS]" .-> 5
+  5 -. "Tiles [HTTPS]" .-> 2
+  5 -. "REST [JSON/HTTPS]" .-> 6
+  5 -. "Canal DIRECTO [WSS]" .-> 9
+  6 -. "Autenticación" .-> 7
+  6 -. "Gestión de salas" .-> 9
+  6 -. "Historial" .-> 16
+  6 -. "KPIs" .-> 17
+  9 -. "getProfile(email) [gRPC :9090]" .-> 7
+  9 -. "Redis protocol" .-> 19
+  7 -. "JDBC" .-> 20
+  8 -. "JDBC" .-> 21
+  16 -. "JDBC" .-> 22
+  17 -. "JDBC" .-> 23
+  8 -. "AMQP" .-> 18
+  9 -. "AMQP" .-> 18
+  18 -. "AMQP" .-> 16
+  18 -. "AMQP" .-> 17
+
+linkStyle 0 stroke:#2E7D32,stroke-width:3px
