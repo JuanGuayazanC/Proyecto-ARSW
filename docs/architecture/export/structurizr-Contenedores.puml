@@ -1,0 +1,44 @@
+@startuml Contenedores
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+LAYOUT_LEFT_RIGHT()
+
+Person(atleta, "Atleta", "Crea o se une a salas, transmite GPS, ve ranking")
+System_Ext(mapas, "Servicio de Mapas", "Leaflet + OpenStreetMap")
+
+System_Boundary(raceflow, "RaceFlow") {
+  Container(webapp, "Web Application", "React + TS + Leaflet", "Interfaz del atleta")
+  Container(gateway, "API Gateway", "Spring Cloud Gateway", "Punto de entrada REST, 2 workers")
+  Container(auth, "Auth Service", "Java 21 + Spring Boot", "Registro, login, JWT, gRPC :9090")
+  Container(room, "Room Service", "Java 21 + Spring Boot", "Ciclo de vida de salas")
+  Container(realtime, "Realtime / Ranking Service", "Java 21 + Spring Boot", "GPS, ranking, voz — fijado a 1 instancia")
+  Container(session, "Session / History Service", "Java 21 + Spring Boot", "Historial de sesiones")
+  Container(metrics, "Metrics Service", "Java 21 + Spring Boot", "KPIs de negocio")
+  ContainerQueue(bus, "Event Bus", "RabbitMQ", "Eventos asíncronos")
+  ContainerDb(redis, "Estado en memoria", "Redis", "Ranking cacheado, TTL 1h")
+  ContainerDb(authDb, "Auth DB", "PostgreSQL", "Usuarios y credenciales")
+  ContainerDb(roomDb, "Room DB", "PostgreSQL", "Salas y participantes")
+  ContainerDb(sessionDb, "Session DB", "PostgreSQL", "Historial")
+  ContainerDb(metricsDb, "Metrics DB", "PostgreSQL", "Read model de KPIs")
+}
+
+Rel(atleta, webapp, "Accede", "HTTPS")
+Rel(webapp, mapas, "Tiles", "HTTPS")
+Rel(webapp, gateway, "REST", "JSON/HTTPS")
+Rel(webapp, realtime, "Canal DIRECTO", "WSS")
+Rel(gateway, auth, "Autenticación")
+Rel(gateway, realtime, "Gestión de salas")
+Rel(gateway, session, "Historial")
+Rel(gateway, metrics, "KPIs")
+Rel(realtime, auth, "getProfile(email)", "gRPC :9090")
+Rel(realtime, redis, "Redis protocol")
+Rel(auth, authDb, "JDBC")
+Rel(room, roomDb, "JDBC")
+Rel(session, sessionDb, "JDBC")
+Rel(metrics, metricsDb, "JDBC")
+Rel(room, bus, "AMQP")
+Rel(realtime, bus, "AMQP")
+Rel(bus, session, "AMQP")
+Rel(bus, metrics, "AMQP")
+
+SHOW_LEGEND()
+@enduml

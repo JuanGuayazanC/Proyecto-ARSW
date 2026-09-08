@@ -6,11 +6,11 @@ workspace "RaceFlow" "Salas de entrenamiento colaborativas en tiempo real para d
         athlete = person "Atleta" "Crea o se une a salas, transmite GPS en vivo, ve mapa y ranking, habla por el chat de voz del grupo y consulta su historial."
 
         mapsService = softwareSystem "Servicio de Mapas" "Provee los tiles del mapa para visualizar posiciones en vivo (Leaflet + OpenStreetMap)." {
-            tags "External"
+            tags "ExternalMaps"
         }
 
         geolocationApi = softwareSystem "API de Geolocalización" "API del navegador que provee las coordenadas GPS del dispositivo del atleta." {
-            tags "External"
+            tags "ExternalGeo"
         }
 
         raceflow = softwareSystem "RaceFlow" "Plataforma web de salas de entrenamiento colaborativas en tiempo real para deportes de cronometraje." {
@@ -117,33 +117,52 @@ workspace "RaceFlow" "Salas de entrenamiento colaborativas en tiempo real para d
         styles {
             element "Person" {
                 shape Person
-                background #1A3A5C
-                color #FFFFFF
+                background #FFFFFF
+                color #2E7D32
+                stroke #2E7D32
+                strokeWidth 4
             }
             element "Software System" {
-                background #2471A3
-                color #FFFFFF
+                background #FFFFFF
+                color #1565C0
+                stroke #1565C0
+                strokeWidth 4
                 shape RoundedBox
             }
-            element "External" {
-                background #999999
-                color #FFFFFF
+            element "ExternalMaps" {
+                background #FFFFFF
+                color #E65100
+                stroke #E65100
+                strokeWidth 4
+                shape RoundedBox
+            }
+            element "ExternalGeo" {
+                background #FFFFFF
+                color #B71C1C
+                stroke #B71C1C
+                strokeWidth 4
                 shape RoundedBox
             }
             element "Container" {
-                background #438DD5
-                color #FFFFFF
+                background #FFFFFF
+                color #1565C0
+                stroke #1565C0
+                strokeWidth 3
                 shape RoundedBox
             }
             element "Component" {
-                background #85BBF0
-                color #000000
+                background #FFFFFF
+                color #1565C0
+                stroke #1565C0
+                strokeWidth 2
                 shape RoundedBox
             }
             element "Web Browser" {
                 shape WebBrowser
-                background #17C3B2
-                color #06303A
+                background #FFFFFF
+                color #1565C0
+                stroke #1565C0
+                strokeWidth 3
             }
             element "Database" {
                 shape Cylinder

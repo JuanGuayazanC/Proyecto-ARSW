@@ -1,7 +1,12 @@
 # RaceFlow — Documentación de Arquitectura (C4)
 
-Diagramas de arquitectura del sistema usando el [modelo C4](https://c4model.com/)
-y [Structurizr Lite](https://structurizr.com/help/lite).
+Diagramas de arquitectura del sistema usando el [modelo C4](https://c4model.com/),
+renderizados con [C4-PlantUML](https://github.com/plantuml-stdlib/C4-PlantUML) a
+partir del modelo fuente en [`workspace.dsl`](workspace.dsl). El modelo se creó
+originalmente con [Structurizr Lite](https://structurizr.com/help/lite), pero esa
+herramienta fue descontinuada por sus autores; `workspace.dsl` se conserva como
+referencia legible del modelo, mientras que los `.puml` en `export/` son la
+fuente real de los diagramas.
 
 > Para el mapeo de los estilos de comunicación distribuida (sockets, HTTP, RMI, gRPC,
 > microservicios, API Gateway) contra la arquitectura real de RaceFlow, ver
@@ -25,38 +30,34 @@ y [Structurizr Lite](https://structurizr.com/help/lite).
 
 ### Nivel 3 — Componentes del Realtime Service
 
-> Zoom interno del servicio más crítico: `RoomWebSocketHandler` → `PositionIngestor`
-> → `RankingService` → `RankingStrategy` (Strategy) → `RoomStateClient` (Redis) → `EventPublisher` (RabbitMQ).
+> Zoom interno del servicio más crítico: `WebSocketAuthInterceptor` → `RoomWebSocketHandler`
+> → `RoomManager` (resuelve nombre vía `GrpcAuthClient`) y → `RankingService` → `RankingStrategy`
+> (Strategy), con el ranking cacheado en Redis.
 
 ![Componentes Realtime](export/structurizr-Componentes_Realtime.png)
 
 ---
 
-## Editar y visualizar los diagramas
+## Editar y regenerar los diagramas
+
+Structurizr Lite (la herramienta original de este proyecto) fue descontinuada
+por sus autores y ya no se levanta. Los diagramas ahora se editan directamente
+en los archivos `.puml` de `export/`, usando la sintaxis de
+[C4-PlantUML](https://github.com/plantuml-stdlib/C4-PlantUML).
 
 **Requisito:** Docker Desktop instalado.
 
-Desde esta carpeta (`docs/architecture/`):
-
 ```bash
-docker compose up
+docker run -d --name plantuml-server -p 8082:8080 plantuml/plantuml-server
+docker cp export/structurizr-Contexto.puml plantuml-server:/tmp/contexto.puml
+docker exec plantuml-server java -jar /usr/local/plantuml.jar -tpng /tmp/contexto.puml
+docker cp plantuml-server:/tmp/Contexto.png export/structurizr-Contexto.png
 ```
 
-Abrir en el navegador: **http://localhost:8080**
-
-Para detenerlo:
-
-```bash
-docker compose down
-```
-
-## Editar el DSL y ver cambios en vivo
-
-1. Edita [`workspace.dsl`](workspace.dsl) con cualquier editor de texto.
-2. Guarda el archivo.
-3. Refresca **http://localhost:8080** — Structurizr Lite detecta los cambios automáticamente.
-
-No es necesario reiniciar el contenedor.
+Repite el mismo patrón para `structurizr-Contenedores.puml` y
+`structurizr-Componentes_Realtime.puml`. Si cambias el modelo, actualiza tanto
+`workspace.dsl` (referencia legible) como los `.puml` correspondientes — hoy
+son independientes, no se generan el uno del otro.
 
 ## Vistas disponibles
 
@@ -70,17 +71,16 @@ No es necesario reiniciar el contenedor.
 
 ```
 docs/architecture/
-├── workspace.dsl       ← modelo C4 en DSL de Structurizr
-├── workspace.json      ← estado generado por Structurizr Lite
-├── docker-compose.yml  ← levanta Structurizr Lite en :8080
+├── workspace.dsl       ← modelo C4 en DSL de Structurizr (referencia legible)
+├── workspace.json      ← estado legado de Structurizr Lite (ya no se usa)
 ├── README.md           ← este archivo
 └── export/
     ├── structurizr-Contexto.png
-    ├── structurizr-Contexto.mmd
+    ├── structurizr-Contexto.puml
     ├── structurizr-Contenedores.png
-    ├── structurizr-Contenedores.mmd
+    ├── structurizr-Contenedores.puml
     ├── structurizr-Componentes_Realtime.png
-    └── structurizr-Componentes_Realtime.mmd
+    └── structurizr-Componentes_Realtime.puml
 ```
 
 ## Referencia rápida del DSL
