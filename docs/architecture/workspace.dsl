@@ -9,7 +9,7 @@ workspace "RaceFlow" "Salas de entrenamiento colaborativas en tiempo real para d
             tags "ExternalMaps"
         }
 
-        geolocationApi = softwareSystem "API de Geolocalización" "API del navegador que provee las coordenadas GPS del dispositivo del atleta." {
+        geolocationApi = softwareSystem "API de Geolocalización" "Geolocation API nativa del navegador (estándar W3C, navigator.geolocation) que provee las coordenadas GPS del dispositivo del atleta." {
             tags "ExternalGeo"
         }
 
